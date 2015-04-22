@@ -37,8 +37,8 @@ class Room {
     // Delete client from clients set
     this.clients.delete(client.id)
 
-    // Broadcast user-left event to all other clients in namespace 
-    this.namespace.emit('userLeft', client.id)
+    // Broadcast `peer disconnect` event to all other clients in namespace 
+    this.namespace.emit('peer disconnect', client.id)
   }
 
   broadcastMessage(data) {

@@ -10,6 +10,10 @@ class RoomsStore {
     return this.rooms.set(roomId, new Room(roomId, initiator))
   }
 
+  getRoom(roomId) {
+    return this.rooms.get(roomId)
+  }
+
   deleteRoom(roomId) {
     return this.rooms.delete(roomId)
   }
@@ -17,12 +21,12 @@ class RoomsStore {
   removeRoomClient(roomId, client) {
     let room = this.getRoom(roomId)
 
-    // If room doesn't exist, throw 'room not found' error
+    // If room doesn't exist, bail
     if (!room) {
-      throw new Error('Room not found')
+      return
     }
 
-    // Room exists... if client is room's initiator, delete room
+    // Room exists... if client is room's initiator, delete room and bail
     if (client.id === room.initiator.id) {
       return this.deleteRoom(roomId)
     }

@@ -4,7 +4,7 @@ let io = require('./io')
 // Socket Connection Handler
 io.sockets.on('connection', (socket) => {
     // Create room
-    socket.on('createRoom', (roomId) => {
+    socket.on('newRoom', (roomId) => {
         RoomsStore.createRoom(roomId, socket)
     })
 
@@ -14,7 +14,7 @@ io.sockets.on('connection', (socket) => {
     })
 
     // Disconnect
-    socket.on('disconnect', => {
+    socket.on('disconnect', () => {
     	RoomsStore.removeRoomClient(socket)
     })
 })

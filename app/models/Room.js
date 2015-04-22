@@ -30,7 +30,7 @@ class Room {
     client.on('message', (data) => this.broadcastMessage(data))
     
     // When client disconnects, remove client from room
-    client.on('disconnect', => this.removeClient(client))
+    client.on('disconnect', () => this.removeClient(client))
   }
 
   removeClient(client) {
@@ -38,7 +38,7 @@ class Room {
     this.clients.delete(client.id)
 
     // Broadcast user-left event to all other clients in namespace 
-    this.namespace.emit('user-left', client.id)
+    this.namespace.emit('userLeft', client.id)
   }
 
   broadcastMessage(data) {

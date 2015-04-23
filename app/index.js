@@ -3,13 +3,11 @@ let io = require('./io')
 
 // Socket Connection Handler
 io.sockets.on('connection', (socket) => {
-    // Create room
-    socket.on('new room', (roomId) => {
-        RoomsStore.createRoom(roomId, socket)
-    })
+    console.log('new socket connection... socket.id:', socket.id)
 
-    // Ping room
-    socket.on('ping', (roomId) => {
-        socket.emit('ping', RoomsStore.pingRoom(roomId))
+    // Create room
+    socket.on('join room', (roomId) => {
+        console.log(`join room with id "${roomId}"... socket.id:`, socket.id)
+        RoomsStore.addRoomClient(roomId, socket)
     })
 })

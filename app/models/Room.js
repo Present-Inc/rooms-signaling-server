@@ -1,14 +1,5 @@
 class Room {
   constructor(id, initiator) {
-    // initiatior's (socket) server is (circular reference to) `io`
-    let io = initiator.server
-
-    // Room namespace
-    this.namespace = io.of(`/${id}`)
-
-    // Add clients as they connect to the room's namespace
-    this.namespace.on('connection', (client) => this.addClient(client))
-
     // Room id
     this.id = id
 
@@ -17,16 +8,23 @@ class Room {
 
     // Map: client id -> client socket
     this.clients = new Map([[initiator.id, initiator]])
+
+    console.log('Room constructor - this:', this)
   }
 
   addClient(client) {
+    console.log(`Room ("${this.id}") addClient... client.id:`, client.id)
     // Add client to clients set
     this.clients.set(client.id, client)
 
-    // Emit connect event to newly-connected client
-    client.emit('connect', true)
+    // Make client join this room
+    client.join(this.id)
 
-    // Broadcast message events from socket to all other clients in namespace
+    // Set this room as client's currentRoom
+    client.currentRoom = this
+
+    // Broadcast message events from socket to all other clients in 
+    // namespace.
     client.on('message', (data) => this.broadcastMessage(data))
     
     // When client disconnects, remove client from room
@@ -34,16 +32,28 @@ class Room {
   }
 
   removeClient(client) {
+    console.log(`Room ("${this.id}") removeClient... client.id:`, client.id)
     // Delete client from clients set
     this.clients.delete(client.id)
 
-    // Broadcast `peer disconnect` event to all other clients in namespace 
-    this.namespace.emit('peer disconnect', client.id)
+    // Make client leave this room
+    client.leave(this.id)
+
+    // Set client's current room to null
+    client.currentRoom = null
+
+    // Broadcast `peer disconnect` event to all other clients in room
+    io.to(this.id).emit('peer disconnect', client.id)
   }
 
   broadcastMessage(data) {
+    console.log(`Room ("${this.id}") broadcastMessage... data:`, data)
+    // room's initiatior's (socket) server is (circular reference 
+    // to) `io`.
+    let io = this.initiator.server
+
     // Broadcast message to all clients in room
-    this.namespace.emit('message', data)
+    io.to(this.id).emit('message', data)
   }
 }
 

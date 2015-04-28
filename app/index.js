@@ -23,5 +23,9 @@ io.sockets.on('connection', (socket) => {
   })
 
   // Disconnect / leave current rooms
-  socket.on('disconnect', () => if (socket.currentRoom) RoomsStore.removeRoomClient(socket.currentRoom.id, socket))
+  socket.on('disconnect', () => { 
+    if (socket.currentRoom) {
+      RoomsStore.removeRoomClient(socket.currentRoom.id, socket)
+    }
+  })
 })

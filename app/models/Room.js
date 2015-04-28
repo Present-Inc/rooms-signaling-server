@@ -27,6 +27,8 @@ class Room {
 
   removeClient(client) {
     console.log(`Room ("${this.id}") removeClient... client.id:`, client.id)
+    let io = this.initiator.server
+    
     // Delete client from clients set
     this.clients.delete(client.id)
 

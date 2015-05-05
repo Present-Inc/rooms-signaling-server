@@ -32,6 +32,9 @@ class Room {
       messages: this.events.values() // An array of messages already that were broadcasted in this room
     }
 
+    // !!: DEBUG ONLY
+    console.log('joinRoomDescriptor:', joinRoomDescriptor)
+
     // Send client `join room` event "join room descriptor"
     this.sendEvent(client.id, 'join room', joinRoomDescriptor)
   }
@@ -95,6 +98,8 @@ class DebugRoom extends Room {
 
   broadcastEvent(name, data) {
     console.log(`Room ("${this.id}") broadcastEvent... name "${name}" data:`, data)
+    console.log('this.events:', this.events)
+    console.log('this.events.values():', this.events.values())
     return super.broadcastEvent(name, data)
   }
 

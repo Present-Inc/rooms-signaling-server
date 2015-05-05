@@ -4,22 +4,17 @@ class RoomsStore {
   constructor() {
     // Map: roomId -> room
     this.rooms = new Map()
-
-    console.log('RoomsStore constructor - this:', this)
   }
 
   createRoom(roomId, initiator) {
-    console.log(`RoomsStore createRoom with id "${roomId}"... initiator.id:`, initiator.id)
     return this.rooms.set(roomId, new Room(roomId, initiator))
   }
 
   getRoom(roomId) {
-    console.log(`RoomsStore getRoom with id "${roomId}"...`)
     return this.rooms.get(roomId)
   }
 
   deleteRoom(roomId) {
-    console.log(`RoomsStore deleteRoom with id "${roomId}"...`)
     let room = this.getRoom(roomId)
 
     // If room doesn't exist, bail
@@ -35,7 +30,6 @@ class RoomsStore {
   }
 
   addRoomClient(roomId, client) {
-    console.log(`RoomsStore addRoomClient to room with id "${roomId}"... client.id:`, client.id)
     let room = this.getRoom(roomId)
 
     // If room doesn't exist, create room with client as initiator
@@ -48,7 +42,6 @@ class RoomsStore {
   }
 
   removeRoomClient(roomId, client) {
-    console.log(`RoomsStore removeRoomClient from room with id "${roomId}"... client.id:`, client.id)
     let room = this.getRoom(roomId)
 
     // If room doesn't exist, bail
@@ -67,5 +60,38 @@ class RoomsStore {
   }
 }
 
-// Export RoomsStore
-module.exports = RoomsStore
+// RoomsStore subclass w/ debug logs
+class DebugRoomsStore extends RoomsStore {
+  constructor() {
+    super()
+    console.log('RoomsStore constructor - this:', this)
+  }
+
+  createRoom(roomId, initiator) {
+    console.log(`RoomsStore createRoom with id "${roomId}"... initiator.id:`, initiator.id)
+    return super.createRoom(roomId, initiator)
+  }
+
+  getRoom(roomId) {
+    console.log(`RoomsStore getRoom with id "${roomId}"...`)
+    return super.getRoom(roomId)
+  }
+
+  deleteRoom(roomId) {
+    console.log(`RoomsStore deleteRoom with id "${roomId}"...`)
+    return super.deleteRoom(roomId)
+  }
+
+  addRoomClient(roomId, client) {
+    console.log(`RoomsStore addRoomClient to room with id "${roomId}"... client.id:`, client.id)
+    return super.addRoomClient(roomId, client)
+  }
+
+  removeRoomClient(roomId, client) {
+    console.log(`RoomsStore removeRoomClient from room with id "${roomId}"... client.id:`, client.id)
+    return super.removeRoomClient(roomId, client)
+  }
+}
+
+// Export class
+module.exports = DebugRoomsStore

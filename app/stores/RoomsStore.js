@@ -8,7 +8,8 @@ class RoomsStore {
 
   createRoom(roomId, initiator) {
     let room = new Room(roomId, initiator)
-    
+
+    // Add new room to rooms map
     this.rooms.set(roomId, room)
 
     return room

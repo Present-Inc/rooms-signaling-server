@@ -5,9 +5,6 @@ class Room {
 
     // Set: room events
     this.events = new Set()
-
-    // Map: client id -> client socket
-    this.clients = new Map([[initiator.id, initiator]])
   }
 
   addClient(client) {

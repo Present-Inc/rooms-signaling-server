@@ -7,7 +7,11 @@ class RoomsStore {
   }
 
   createRoom(roomId, initiator) {
-    return this.rooms.set(roomId, new Room(roomId, initiator))
+    let room = new Room(roomId, initiator)
+    
+    this.rooms.set(roomId, room)
+
+    return room
   }
 
   getRoom(roomId) {
@@ -34,7 +38,7 @@ class RoomsStore {
 
     // If room doesn't exist, create room with client as initiator
     if (!room) {
-      return this.createRoom(roomId, client)
+      room = this.createRoom(roomId, client)
     }
 
     // Room exists, add room client

@@ -3,8 +3,8 @@ class Room {
     this.id = id
     this.initiator = initiator
 
-    // Set: room events
-    this.events = new Set()
+    // Array: room events
+    this.events = []
 
     // Map: client id -> client socket
     this.clients = new Map()
@@ -29,7 +29,7 @@ class Room {
       isInitiator: client.id === this.initiator.id, // Whether the new client is this room initiator
       roomId: this.id, // This room's id
       clientId: client.id, // The client's id
-      messages: this.events.values() // An array of messages already that were broadcasted in this room
+      messages: this.events // An array of messages already that were broadcasted in this room
     }
 
     // !!: DEBUG ONLY
@@ -59,7 +59,7 @@ class Room {
 
   broadcastEvent(name, data) {
     // Add event to room events set
-    this.events.add({ name: name, data: data })
+    this.events.push({ name: name, data: data })
 
     // Broadcast event to all clients in room
     this.sendEvent(this.id, name, data)
@@ -99,7 +99,6 @@ class DebugRoom extends Room {
   broadcastEvent(name, data) {
     console.log(`Room ("${this.id}") broadcastEvent... name "${name}" data:`, data)
     console.log('this.events:', this.events)
-    console.log('this.events.values():', this.events.values())
     return super.broadcastEvent(name, data)
   }
 

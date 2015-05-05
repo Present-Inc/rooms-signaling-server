@@ -5,10 +5,13 @@ class Room {
 
     // Set: room events
     this.events = new Set()
+
+    // Map: client id -> client socket
+    this.clients = new Map()
   }
 
   addClient(client) {
-    // Add client to clients set
+    // Add client to clients map
     this.clients.set(client.id, client)
 
     // If client has a currentRoom, remove him from it before adding 

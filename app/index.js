@@ -11,7 +11,7 @@ io.sockets.on('connection', (socket) => {
   // Message current room
   socket.on('message', (data) => {
     if (socket.currentRoom) {
-      socket.currentRoom.broadcastMessage(data)
+      socket.currentRoom.broadcastMessage(data, socket)
     }
   })
 

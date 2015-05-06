@@ -52,17 +52,25 @@ class Room {
     this.broadcastEvent('peer disconnect', client.id)
   }
 
-  broadcastMessage(data) {
+  broadcastMessage(data, sourceClient) {
     // Broadcast message event & data to all clients in room
-    this.broadcastEvent('message', data)
+    this.broadcastEvent('message', data, sourceClient)
   }
 
-  broadcastEvent(name, data) {
+  broadcastEvent(name, data, sourceClient) {
     // Add event to room events set
-    this.events.push({ name: name, data: data })
+    this.events.push({ 
+      name: name, 
+      data: data,
+      client: sourceClient
+    })
 
-    // Broadcast event to all clients in room
-    this.sendEvent(this.id, name, data)
+    // Broadcast event to all clients in room, except source client
+    for (client in this.clients.values()) {
+      if (client.id !== sourceClient.id) {
+        this.sendEvent(client.id, name, data)
+      }
+    }
   }
 
   sendEvent(socketId, name, data) {
@@ -91,15 +99,15 @@ class DebugRoom extends Room {
     return super.removeClient(client)
   }
 
-  broadcastMessage(data) {
+  broadcastMessage(data, sourceClient) {
     console.log(`Room ("${this.id}") broadcastMessage... data:`, data)
-    return super.broadcastMessage(data)
+    return super.broadcastMessage(data, sourceClient)
   }
 
-  broadcastEvent(name, data) {
+  broadcastEvent(name, data, sourceClient) {
     console.log(`Room ("${this.id}") broadcastEvent... name "${name}" data:`, data)
     console.log('this.events:', this.events)
-    return super.broadcastEvent(name, data)
+    return super.broadcastEvent(name, data, sourceClient)
   }
 
   sendEvent(socketId, name, data) {

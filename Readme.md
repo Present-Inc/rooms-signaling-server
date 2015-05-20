@@ -1,5 +1,5 @@
-# WebRTC Video Service
-Present WebRTC Video
+# WebRTC Rooms Signaling Server
+A simple signaling server for WebRTC chat rooms.
 
 * * *
 
